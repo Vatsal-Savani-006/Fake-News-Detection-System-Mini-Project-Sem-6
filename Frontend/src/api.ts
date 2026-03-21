@@ -89,3 +89,18 @@ export async function getMyAnalysisApi() {
 
   return response.json();
 }
+
+export async function getMyAnalysisApi(){
+const response = await fetch(`${API_URL}/api/analysis/statistics`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.error || "Failed to fetch analysis");
+  }
+
+  return response.json();
+
+}

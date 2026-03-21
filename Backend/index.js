@@ -7,6 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middelware/auth");
 const { login } = require("./controller/validation");
+const { deleteUser } = require("./services/auth");
 
 const { connecttomongodb } = require("./connect");
 
@@ -19,7 +20,7 @@ app.use(cookieParser());
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow all localhost origins during development
+    
     if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1')) {
       callback(null, true);
     } else {
@@ -36,21 +37,15 @@ let dbConnected = false;
 connecttomongodb("mongodb://localhost:27017/fake-news-detection")
   .then(() => {
     dbConnected = true;
-    console.log("✅ MongoDB connected");
+    console.log("MongoDB connected");
   })
   .catch(err => {
-    console.error("❌ MongoDB connection error:", err.message);
+    console.error(" MongoDB connection error:", err.message);
     dbConnected = false;
   });
 
 // Health check endpoint
-app.get("/health", (req, res) => {
-  res.json({ 
-    status: "ok", 
-    server: "running",
-    database: dbConnected ? "connected" : "disconnected"
-  });
-});
+
 
 app.post("/predict", authMiddleware, async (req, res) => {
   try {
@@ -114,7 +109,7 @@ app.post("/predict", authMiddleware, async (req, res) => {
 
     await analysis.save();
 
-    // ✅ ALWAYS RETURN JSON
+    
     return res.json({
       prediction: analysis.prediction,
       confidence: analysis.confidence,
@@ -123,7 +118,7 @@ app.post("/predict", authMiddleware, async (req, res) => {
   } catch (err) {
     console.error("❌ Predict error:", err);
 
-    // ✅ ALWAYS RETURN JSON EVEN ON ERROR
+    
     return res.status(500).json({
       error: "Prediction failed",
       details: err.message,
@@ -175,7 +170,11 @@ app.post("/signup", async (req, res) => {
 app.post("/login", login);
 
 app.post("/logout", (req, res) => {
-  // Clear the session cookie
+ 
+  if(req.cookies.sessionId){
+    const sessionId = req.cookies.sessionId;
+    deleteUser(sessionId);
+  }
   res.clearCookie("sessionId", {
     httpOnly: true,
     secure: false,
@@ -185,5 +184,5 @@ app.post("/logout", (req, res) => {
 });
 
 app.listen(3001, () => {
-  console.log("🚀 Node running on http://localhost:3001");
+  console.log(" Node running on http://localhost:3001");
 });

@@ -21,7 +21,7 @@ interface ValidationErrors {
   name?: string;
 }
 
-// Validator utility
+
 class Validator {
   static validateEmail(email: string): string | undefined {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -79,7 +79,7 @@ const handleLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       const data = await loginApi(loginEmail, loginPassword);
 
-      // ✅ Store user data (session cookie is set automatically by the server)
+      //  Store user data (session cookie is set automatically by the server)
       localStorage.setItem("user", JSON.stringify(data.user));
 
       // reset form
@@ -165,12 +165,12 @@ const handleLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
     <div className="page-container">
       <div className="logo-container">
         <div className="shield-icon"></div>
-        <div className="logo-text">Truth Guard</div>
+        <div className="logo-text">Check4Facts</div>
       </div>
 
       <div className="login-container">
         <div className="welcome-text">
-          <h1>Welcome to Truth Guard</h1>
+          <h1>Welcome to Check4Facts</h1>
           <p>Your trusted fake news detection system</p>
         </div>
 
@@ -240,7 +240,7 @@ const handleLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
                 id="signupName"
                 value={signupName}
                 onChange={handleSignupNameChange}
-                placeholder="Ramji Bhai"
+                placeholder="Dr. Jay Vala Sir"
                 className={signupErrors.name ? 'error' : ''}
                 required
               />
