@@ -3,6 +3,7 @@
 // import { predictApi, logoutApi } from "../api";
 import { logoutApi } from '../api';
 import './css/AnalyzePage.css';
+import { useNavigate } from 'react-router-dom';
 
 const handleLogout = async () => {
     try {
@@ -15,6 +16,7 @@ const handleLogout = async () => {
   };
 
  function Navbar() {
+    const navigator = useNavigate();
     return (
         <>
       {/* Header */}
@@ -22,17 +24,34 @@ const handleLogout = async () => {
         <div className="header-container">
           {/* Logo */}
           <div className="logo-section">
-            <div className="logo-icon">
+            {/* <div className="logo-icon">
               <svg className="checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-            </div>
+            </div> */}
+            
             <span className="logo-text">Check4Facts</span>
           </div>
 
           {/* Navigation */}
           <nav className="nav">
-            <button className="nav-btn">
+            <button className="nav-btn" onClick={()=>navigator("/dashboard")}>
+              <svg 
+  className="icon" 
+  fill="none" 
+  stroke="currentColor" 
+  viewBox="0 0 24 24"
+>
+  <path 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    strokeWidth={2} 
+    d="M3 12l9-9 9 9M4 10v10h5v-6h6v6h5V10"
+  />
+</svg>
+              <span>Dashboard</span>
+            </button>
+            <button className="nav-btn"   onClick={()=>navigator("/profile")} >
               <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>

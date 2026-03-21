@@ -1,5 +1,6 @@
 const API_URL = "http://localhost:3001";
 
+
 // LOGIN
 export async function loginApi(email: string, password: string) {
   const response = await fetch(`${API_URL}/login`, {
@@ -76,7 +77,7 @@ export async function predictApi(newsText: string) {
 }
 
 // GET MY ANALYSIS
-export async function getMyAnalysisApi() {
+export async function getMyAnalysisApi1() {
   const response = await fetch(`${API_URL}/my-analysis`, {
     method: "GET",
     credentials: "include",

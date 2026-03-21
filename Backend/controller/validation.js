@@ -21,7 +21,7 @@ exports.login = async (req, res) => {
 
     //create session
     const sessionId = uuidv4();
-    setUser(sessionId, { email });
+    setUser(sessionId, { email: user.email, id: user._id.toString() });
 
     //SET COOKIE 
     res.cookie("sessionId", sessionId, {

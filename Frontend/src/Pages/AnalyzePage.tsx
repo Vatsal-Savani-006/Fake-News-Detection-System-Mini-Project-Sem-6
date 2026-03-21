@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import './css/AnalyzePage.css';
-import { predictApi, logoutApi } from "../api";
+import { predictApi } from "../api";
 import Navbar from './Navbar';
 
 export default function NewsAnalyzer() {
@@ -92,7 +92,7 @@ export default function NewsAnalyzer() {
             <h2>Analysis Result</h2>
             <p>
               <strong>Prediction:</strong>{' '}
-              <span className={result.prediction === 'Real' ? 'real' : 'fake'}>{result.prediction}</span>
+              <span className={result.prediction === 'REAL' ? 'real' : 'fake'}>{result.prediction}</span>
             </p>
             <p>
               <strong>Confidence:</strong> {(Number(result.confidence) * 100).toFixed(1)}%
