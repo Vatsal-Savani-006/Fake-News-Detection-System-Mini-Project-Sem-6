@@ -8,6 +8,7 @@ module.exports = function authMiddleware(req, res, next) {
     return res.status(401).json({ error: "Not authenticated" });
   }
 
+   
   const user = getUser(sessionId);
   if (!user) {
     return res.status(401).json({ error: "Session expired" });

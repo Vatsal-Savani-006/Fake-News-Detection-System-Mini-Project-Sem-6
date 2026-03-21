@@ -15,12 +15,12 @@ const analysisSchema = new mongoose.Schema({
 
   prediction: {
     type: String,
-    enum: ["Fake", "Real"],
+    enum: ["FAKE", "REAL"],
     required: true,
   },
 
   confidence: {
-    type: Number, // 0.00 – 1.00
+    type: Number, 
     required: true,
   },
 

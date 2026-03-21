@@ -22,22 +22,16 @@
 }
 
 .shield-icon {
-  width: 60px;
-  height: 60px;
-  background: #4169E1;
-  border-radius: 8px;
+  width: 90px;
+  /* height: 60px; */
+  /* background: #4169E1; */
+  /* border-radius: 8px; */
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
-.shield-icon::before {
-  content: '✓';
-  color: white;
-  font-size: 32px;
-  font-weight: bold;
-}
 
 .logo-text {
   font-size: 36px;

@@ -7,30 +7,30 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1️⃣ check user exists
+    //check user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // 2️⃣ check password
+    //check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // 3️⃣ create session
+    //create session
     const sessionId = uuidv4();
-    setUser(sessionId, { email });
+    setUser(sessionId, { email: user.email, id: user._id.toString() });
 
-    // 4️⃣ SET COOKIE (THIS IS THE IMPORTANT LINE)
+    //SET COOKIE 
     res.cookie("sessionId", sessionId, {
       httpOnly: true,
-      secure: false,      // true only on HTTPS
+      secure: false,     
       sameSite: "lax",
     });
 
-    // 5️⃣ send response (REQUIRED)
+    //send response 
     return res.json({
       message: "Login successful",
       user: {

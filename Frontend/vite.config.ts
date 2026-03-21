@@ -57,5 +57,8 @@
       port: 5173,
       strictPort: false,
       open: true,
+      allowedHosts: [
+      "antivirus-scanned-trivia-surname.trycloudflare.com"
+      ],
     },
   });

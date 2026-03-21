@@ -28,7 +28,7 @@ body {
 }
 
 .header-container {
-  max-width: 1280px;
+  max-width: 13000px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -234,18 +234,68 @@ body {
 
 /* Result Card Styles */
 .result-area {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
+  padding: 0 1.5rem;
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .result-card {
   display: flex;
-  gap: 1rem;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   background: linear-gradient(180deg, #fff5f6 0%, #fff 100%);
   border: 2px solid #f43f5e;
   border-radius: 12px;
-  padding: 1.25rem 1.5rem;
+  padding: 2rem;
   box-shadow: 0 8px 24px rgba(244, 63, 94, 0.06);
+}
+
+.result-card h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.result-card p {
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.result-card p:last-child {
+  margin-bottom: 0;
+}
+
+.result-card p strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.result-card p .real {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.result-card p .fake {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+  margin-left: 0.5rem;
 }
 
 .result-left {
@@ -354,15 +404,33 @@ body {
   color: #7f1d1d;
 }
 
+.result.error {
+  background: #fef2f2;
+  border: 2px solid #fca5a5;
+  border-radius: 8px;
+  padding: 1.25rem;
+  color: #dc2626;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
 @media (max-width: 768px) {
   .result-card {
     flex-direction: column;
-    padding: 1rem;
+    padding: 1.5rem;
+  }
+
+  .result-card h2 {
+    font-size: 1.25rem;
+  }
+
+  .result-card p {
+    font-size: 1rem;
   }
 
   .result-confidence {
     margin-left: 0;
-    text-align: left;
+    text-align: center;
   }
 }
 

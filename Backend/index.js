@@ -7,6 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middelware/auth");
 const { login } = require("./controller/validation");
+const { deleteUser } = require("./services/auth");
 
 const { connecttomongodb } = require("./connect");
 
@@ -18,17 +19,8 @@ app.use(cookieParser());
 
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow all localhost origins during development
-    if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  credentials: true,
-  allowedHeaders: ["Content-Type"]
+  origin: "*", // for testing (later restrict)
+  credentials: true
 }));
 
 // Connect to MongoDB
@@ -36,21 +28,15 @@ let dbConnected = false;
 connecttomongodb("mongodb://localhost:27017/fake-news-detection")
   .then(() => {
     dbConnected = true;
-    console.log("✅ MongoDB connected");
+    console.log("MongoDB connected");
   })
   .catch(err => {
-    console.error("❌ MongoDB connection error:", err.message);
+    console.error(" MongoDB connection error:", err.message);
     dbConnected = false;
   });
 
 // Health check endpoint
-app.get("/health", (req, res) => {
-  res.json({ 
-    status: "ok", 
-    server: "running",
-    database: dbConnected ? "connected" : "disconnected"
-  });
-});
+
 
 app.post("/predict", authMiddleware, async (req, res) => {
   try {
@@ -108,13 +94,13 @@ app.post("/predict", authMiddleware, async (req, res) => {
     const analysis = new Analysis({
       userId,
       newsText,
-      prediction: prediction === "true" ? "Real" : "Fake",
+      prediction: prediction === "true" ? "REAL" : "FAKE",
       confidence: probability,
     });
 
     await analysis.save();
 
-    // ✅ ALWAYS RETURN JSON
+    
     return res.json({
       prediction: analysis.prediction,
       confidence: analysis.confidence,
@@ -123,7 +109,7 @@ app.post("/predict", authMiddleware, async (req, res) => {
   } catch (err) {
     console.error("❌ Predict error:", err);
 
-    // ✅ ALWAYS RETURN JSON EVEN ON ERROR
+    
     return res.status(500).json({
       error: "Prediction failed",
       details: err.message,
@@ -175,7 +161,11 @@ app.post("/signup", async (req, res) => {
 app.post("/login", login);
 
 app.post("/logout", (req, res) => {
-  // Clear the session cookie
+ 
+  if(req.cookies.sessionId){
+    const sessionId = req.cookies.sessionId;
+    deleteUser(sessionId);
+  }
   res.clearCookie("sessionId", {
     httpOnly: true,
     secure: false,
@@ -184,6 +174,85 @@ app.post("/logout", (req, res) => {
   res.json({ message: "Logged out successfully" });
 });
 
+
+app.get('/api/analysis/statistics', authMiddleware, async (req, res) => {
+  try {
+    const userFromDB = await User.findOne({ email: req.user.email });
+    if (!userFromDB) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    const userId = userFromDB._id;
+    const analyses = await Analysis.find({ userId });
+
+    const statistics = {
+      totalAnalyses: analyses.length,
+      fakeNewsDetected: analyses.filter((a) => a.prediction === 'FAKE').length,
+      realNews: analyses.filter((a) => a.prediction === 'REAL').length,
+      uncertain: analyses.filter((a) => a.prediction === 'UNCERTAIN').length,
+    };
+
+    res.json(statistics);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching statistics' });
+  }
+});
+
+// Get recent analyses (latest 10)
+app.get('/api/analysis/recent', authMiddleware, async (req, res) => {
+  try {
+    const userFromDB = await User.findOne({ email: req.user.email });
+    if (!userFromDB) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    const userId = userFromDB._id;
+    const analyses = await Analysis.find({ userId })
+      .sort({ analyzedAt: -1 })
+      .limit(10);
+
+    const mappedAnalyses = analyses.map(a => ({
+      _id: a._id,
+      title: a.newsText.substring(0, 50) + '...', // assuming title is newsText truncated
+      result: a.prediction,
+      confidence: a.confidence,
+      analyzedAt: a.analyzedAt,
+    }));
+
+    res.json(mappedAnalyses);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching recent analyses' });
+  }
+});
+
+app.get('/api/user/profile', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching profile' });
+  }
+});
+
+// Get all analyses for user
+app.get(
+  '/api/analysis/all',
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const analyses = await Analysis.find({ userId: req.user.id })
+        .sort({ analyzedAt: -1 })
+        .limit(50);
+
+      res.json(analyses);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching analyses' });
+    }
+  }
+);
+
+
 app.listen(3001, () => {
-  console.log("🚀 Node running on http://localhost:3001");
+  console.log(" Node running on http://localhost:3001");
 });
