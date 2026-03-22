@@ -26,8 +26,8 @@ exports.login = async (req, res) => {
     //SET COOKIE 
     res.cookie("sessionId", sessionId, {
       httpOnly: true,
-      secure: false,     
-      sameSite: "lax",
+      secure: true,     
+      sameSite: "None",
     });
 
     //send response 

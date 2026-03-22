@@ -19,22 +19,13 @@ app.use(cookieParser());
 
 
 app.use(cors({
-  origin: function (origin, callback) {
-    
-    if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ["GET", "POST", "OPTIONS"],
-  credentials: true,
-  allowedHeaders: ["Content-Type"]
+  origin: process.env.FRONTEND_URL,
+  credentials: true
 }));
 
 // Connect to MongoDB
 let dbConnected = false;
-connecttomongodb("mongodb://localhost:27017/fake-news-detection")
+connecttomongodb(process.env.MongoDB_URL)
   .then(() => {
     dbConnected = true;
     console.log("MongoDB connected");

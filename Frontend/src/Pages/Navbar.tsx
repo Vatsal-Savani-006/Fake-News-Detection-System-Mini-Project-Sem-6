@@ -24,13 +24,36 @@ const handleLogout = async () => {
         <div className="header-container">
           {/* Logo */}
           <div className="logo-section">
-            {/* <div className="logo-icon">
-              <svg className="checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div> */}
+            <div className="logo-icon">
+             <svg 
+    className="w-10 h-10" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient id="shieldGradient" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#60A5FA" />
+        <stop offset="100%" stopColor="#2563EB" />
+      </linearGradient>
+    </defs>
+
+    <path 
+      d="M12 2L4 6V11C4 16.55 7.84 21.74 12 23C16.16 21.74 20 16.55 20 11V6L12 2Z" 
+      fill="url(#shieldGradient)"
+    />
+
+    <path 
+      d="M9 12L11 14L15 10" 
+      stroke="white" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+            </div>
             
-            <span className="logo-text">Check4Facts</span>
+            <span className="logo-text">TrustGuard</span>
           </div>
 
           {/* Navigation */}
