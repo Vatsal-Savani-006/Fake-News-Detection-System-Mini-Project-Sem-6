@@ -2,8 +2,6 @@ import  { useState, useEffect } from 'react';
 import './css/ProfilePage.css';
 import Navbar from './Navbar';
 
-
-
 interface UserProfile {
   _id: string;
   name: string;
@@ -25,7 +23,7 @@ interface AnalysisDetail {
 
 interface ProfileStats {
   totalAnalyses: number;
-  fakeDetected: number;
+  fakeNewsDetected: number;
   realNews: number;
   uncertain: number;
 }
@@ -144,8 +142,6 @@ export default function ProfilePage() {
         return 'real';
       case 'FAKE':
         return 'fake';
-      case 'UNCERTAIN':
-        return 'uncertain';
       default:
         return '';
     }
@@ -153,17 +149,13 @@ export default function ProfilePage() {
 
   const getFilterCount = (filter: FilterType): number => {
     if (filter === 'ALL') return stats.totalAnalyses;
-    if (filter === 'FAKE') return stats.fakeDetected;
+    if (filter === 'FAKE') return stats.fakeNewsDetected;
     if (filter === 'REAL') return stats.realNews;
-    if (filter === 'UNCERTAIN') return stats.uncertain;
+   
     return 0;
   };
 
-  const toggleAnalysisExpand = (analysisId: string) => {
-    setExpandedAnalysisId(
-      expandedAnalysisId === analysisId ? null : analysisId
-    );
-  };
+
 
   return (
     <>
@@ -210,14 +202,8 @@ export default function ProfilePage() {
                       <span className="detail-label">Email</span>
                       <p className="detail-value">{userProfile.email}</p>
                     </div>
-                    <div className="detail-item">
-                      <span className="detail-label">Member Since</span>
-                      <p className="detail-value">
-                        {new Date(userProfile.memberSince).toLocaleDateString(
-                          'en-GB'
-                        )}
-                      </p>
-                    </div>
+                    
+                      
                   </div>
                 </div>
 
@@ -254,7 +240,7 @@ export default function ProfilePage() {
                         <span className="stat-label">Fake Detected</span>
                       </div>
                       <span className="stat-number fake">
-                        {stats.fakeDetected}
+                        {stats.fakeNewsDetected}
                       </span>
                     </div>
 
@@ -364,23 +350,7 @@ export default function ProfilePage() {
                       <h3 className="analysis-title">{analysis.title}</h3>
                       <p className="analysis-input">Input: {analysis.newsText}</p>
 
-                      <button
-                        className="expand-button"
-                        onClick={() => toggleAnalysisExpand(analysis._id)}
-                      >
-                        
-                      </button>
-
-                      {expandedAnalysisId === analysis._id && (
-                        <div className="analysis-details">
-                          <h4 className="details-title">Analysis Details:</h4>
-                          <ul className="details-list">
-                            {analysis.details.map((detail, index) => (
-                              <li key={index}>{detail}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+    
                     </div>
                   ))}
                 </div>

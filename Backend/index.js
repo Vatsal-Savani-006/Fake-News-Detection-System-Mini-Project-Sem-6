@@ -19,8 +19,17 @@ app.use(cookieParser());
 
 
 app.use(cors({
-  origin: "*", // for testing (later restrict)
-  credentials: true
+  origin: function (origin, callback) {
+    
+    if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: true,
+  allowedHeaders: ["Content-Type"]
 }));
 
 // Connect to MongoDB
@@ -64,7 +73,7 @@ app.post("/predict", authMiddleware, async (req, res) => {
     let mlResponse;
     try {
       mlResponse = await axios.post(
-        "http://localhost:5000/predict",
+        "http://127.0.0.1:5000/predict",
         { news: newsText },
         { timeout: 5000 }
       );
