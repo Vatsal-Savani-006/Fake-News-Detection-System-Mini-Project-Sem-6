@@ -193,12 +193,12 @@ const handleLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
     />
   </svg>
 </div>
-        <div className="logo-text">Check4Facts</div>
+        <div className="logo-text">TrustGuard</div>
       </div>
 
       <div className="login-container">
         <div className="welcome-text">
-          <h1>Welcome to Check4Facts</h1>
+          <h1>Welcome to TrustGuard</h1>
           <p>Your trusted fake news detection system</p>
         </div>
 

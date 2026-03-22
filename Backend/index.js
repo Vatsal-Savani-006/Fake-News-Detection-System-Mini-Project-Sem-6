@@ -34,7 +34,7 @@ app.use(cors({
 
 // Connect to MongoDB
 let dbConnected = false;
-connecttomongodb("mongodb://localhost:27017/fake-news-detection")
+connecttomongodb(process.env.MONGO_URL)
   .then(() => {
     dbConnected = true;
     console.log("MongoDB connected");
